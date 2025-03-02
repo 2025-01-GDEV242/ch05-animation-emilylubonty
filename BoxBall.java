@@ -1,8 +1,8 @@
 import java.awt.Color;
 import java.awt.Shape; 
 import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.geom.*;
-import java.awt.Graphics2D;
 import java.util.Random; 
 import java.util.ArrayList;
 
@@ -19,8 +19,10 @@ public class BoxBall
     private Canvas boxContainer; 
     private Random xBallMotion;
     private Random yBallMotion;
-    private Graphics2D graphic; 
+    private Ellipse2D.Double circle; 
+    private Ellipse2D.Double rectangle; 
     private Color color;
+    private ArrayList<Integer> ballBounce; 
     private int diameter;
     private int rgb; 
     
@@ -33,6 +35,8 @@ public class BoxBall
     public BoxBall()
     {   
         Random random = new Random();
+        ArrayList<Integer> ballBounce = new ArrayList<Integer>(); 
+        
         
         // Parameters for canvas and box display
         boxContainer = new Canvas("Box", 600, 600, Color.white); 
@@ -41,23 +45,37 @@ public class BoxBall
         int leftWall = 200;
         int rightWall = 200; 
         
-        // Parameters for displaying balls
-        
-        int diameter = random.nextInt(20);
-        int xBallMotion = random.nextInt(500);
-        int yBallMotion = random.nextInt(500); 
-        int rgb = random.nextInt(150); 
-        
-        // Displays the balls
-        boxContainer.fillCircle(xBallMotion, yBallMotion, diameter); 
-        
-        
-        
         // Creates a box within the canvas
         boxContainer.setVisible(true); 
         boxContainer.draw(new Rectangle
                          (topWall, bottomWall, leftWall, rightWall));
-                         
+        
+        // Parameters for displaying balls
+        int diameter = random.nextInt(30);
+
+        int xBallMotion = random.nextInt(200);
+        int yBallMotion = random.nextInt(200); 
+        
+        int ballSpeed = random.nextInt(50); 
+        
+        ballBounce.add(1);
+        ballBounce.add(2); 
+        ballBounce.add(3);
+        ballBounce.add(4); 
+        ballBounce.add(5); 
+        
+        
+        // Displays the balls
+        boxContainer.fillCircle(xBallMotion, yBallMotion, diameter);
+        
+        
+        
+        
+        
+    
+        
+        
+        
         // Creates motion at random for balls
         
         
@@ -67,10 +85,10 @@ public class BoxBall
     }
     
     /**
-     * An example of a method - replace this comment with your own
+     * Updates each BoxBall in the collection
      *
-     * @param  y  a sample parameter for a method
-     * @return    the sum of x and y
+     * 
+     * 
      */
     public void boxBounce ()
     {
