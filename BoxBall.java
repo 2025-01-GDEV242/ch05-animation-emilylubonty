@@ -1,106 +1,137 @@
-import java.awt.Color;
-import java.awt.Shape; 
-import java.awt.Rectangle;
 import java.awt.*;
 import java.awt.geom.*;
+import java.util.HashSet;
 import java.util.Random; 
-import java.util.ArrayList;
+
 
 /**
- * BoxBall models a ball that moves inside a box at random. The ball(s) also 
- * bounce off the walls so that the ball always stays inside the box. 
+ * Class BoxBall - Creates graphics for the bouncing balls and the box. Coordinates how the balls move 
+ * at random and their positions.
  *
- * Emily Lubonty
- * 02-24-25
+ * This movement can be initiated by repeated calls to the "move" method.
+ * 
+ * @author Emily Lubonty
+ *
+ * @version 3-6-2025
  */
 
 public class BoxBall
 {
-    private Canvas boxContainer; 
-    private Random xBallMotion;
-    private Random yBallMotion;
-    private Ellipse2D.Double circle; 
-    private Ellipse2D.Double rectangle; 
-    private Color color;
-    private ArrayList<Integer> ballBounce; 
+    // private static final int GRAVITY = 3;  // effect of gravity
+    private int ballDegradation = 2;
+    private Ellipse2D.Double circle;
     private int diameter;
-    private int rgb; 
-    
-    
-    /**
-     * Constructor for objects of class BoxBall.
-     * 
-     * Creates a canvas with a box already visible. 
-     */
-    public BoxBall()
-    {   
-        Random random = new Random();
-        ArrayList<Integer> ballBounce = new ArrayList<Integer>(); 
-        
-        
-        // Parameters for canvas and box display
-        boxContainer = new Canvas("Box", 600, 600, Color.white); 
-        int topWall = 200; 
-        int bottomWall = 200;
-        int leftWall = 200;
-        int rightWall = 200; 
-        
-        // Creates a box within the canvas
-        boxContainer.setVisible(true); 
-        boxContainer.draw(new Rectangle
-                         (topWall, bottomWall, leftWall, rightWall));
-        
-        // Parameters for displaying balls
-        int diameter = random.nextInt(30);
+    private int xPosition;
+    private int yPosition;
+    // private final int groundPosition;      // y position of ground
+    private Canvas canvas;
+    private int ySpeed;                // initial downward speed
+    private Color color; 
 
-        int xBallMotion = random.nextInt(200);
-        int yBallMotion = random.nextInt(200); 
-        
-        int ballSpeed = random.nextInt(50); 
-        
-        ballBounce.add(1);
-        ballBounce.add(2); 
-        ballBounce.add(3);
-        ballBounce.add(4); 
-        ballBounce.add(5); 
-        
-        
-        // Displays the balls
-        boxContainer.fillCircle(xBallMotion, yBallMotion, diameter);
-        
-        
-        
-        
-        
-    
-        
-        
-        
-        // Creates motion at random for balls
-        
-        
-        
-    
-        
-    }
-    
     /**
-     * Updates each BoxBall in the collection
+     * Constructor for objects of class BoxBall
      *
-     * 
-     * 
+     * @param xPos  the horizontal coordinate of the balls
+     * @param yPos  the vertical coordinate of the balls
+     * @param ballDiameter  the diameter (in pixels) of the balls
+     * @param ballColor  the color of the balls
+     * @param groundPos  the position of the ground (where the wall will bounce)
+     * @param drawingCanvas  the canvas to draw the balls on
+     * @param r,g,b the colors for the balls
      */
-    public void boxBounce ()
+    public BoxBall(int ballDiameter, 
+                    Canvas drawingCanvas)
     {
-      
+        Random random = new Random();
+        
+        //Creates random RGB colors
+        int r = random.nextInt(256); 
+        int g = random.nextInt(256);
+        int b = random.nextInt(256);
+        
+        Color ballColor = new Color(r,g,b);
+        ballColor = color; 
+        
+        diameter = ballDiameter;
+        
+        canvas = drawingCanvas; 
+        
+        //Parameters for ball position and speed
+        int ySpeed = random.nextInt();
+        int yPosition = random.nextInt(); 
+        int xPosition = random.nextInt(); 
+        int ballDegradation = random.nextInt();
        
-       
+        
+    }
 
+    /**
+     * Draw the balls and the box at their current positions onto the canvas.
+     **/
+    public void draw()
+    {
+
+        int rightWall = 200;
+        int leftWall = 200;
+        int topWall = 200;
+        int bottomWall = 200;
+    
+        canvas.setForegroundColor(color);
+        canvas.fillCircle(xPosition, yPosition, diameter);
+        canvas.fillRectangle(topWall, bottomWall, leftWall, rightWall); 
+        
     }
     
-  
-    
-    
-    
- 
+    /**
+     * Erases the balls at their current positions.
+     **/
+    public void erase()
+    {
+        canvas.eraseCircle(xPosition, yPosition, diameter);
+    }    
+
+    /**
+     * Move the balls according to their positions and speed, redraws when finished.
+     **/
+    public void move()
+    {
+        // remove from canvas at the current position
+        erase();
+            
+        // compute new position
+        Random random = new Random(); 
+        
+        int bottomWall = 200;  
+        
+        
+        ySpeed += 5; 
+        xPosition = random.nextInt(200); 
+        yPosition = random.nextInt(200);  
+        
+        // check if it has hit the ground
+        if (yPosition >= (bottomWall - diameter) && ySpeed > 0) {
+            yPosition = (int)(bottomWall - diameter);
+            ySpeed = -ySpeed + ballDegradation;
+        }
+
+        // draw again at new position
+        draw();
+    }    
+
+    /**
+     * return the horizontal position of this ball
+     */
+    public int getXPosition()
+    {
+        return xPosition;
+    }
+
+    /**
+     * return the vertical position of this ball
+     */
+    public int getYPosition()
+    {
+        return yPosition;
+    }
+
 }

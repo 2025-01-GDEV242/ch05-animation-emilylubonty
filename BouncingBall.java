@@ -56,7 +56,7 @@ public class BouncingBall
      **/
     public void draw()
     {
-        canvas.setForegroundColor(color);
+        canvas.setForegroundColor(color); 
         canvas.fillCircle(xPosition, yPosition, diameter);
     }
 
